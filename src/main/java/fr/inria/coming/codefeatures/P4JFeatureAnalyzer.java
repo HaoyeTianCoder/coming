@@ -70,7 +70,13 @@ public class P4JFeatureAnalyzer implements Analyzer<IRevision> {
 		String path = revision.getFolder();
 		Map<String, File> filePaths = null;
 		if(path!=null) {
-			filePaths = processFilesPair(new File(path));
+			if (path.contains("pairsD4j")){
+				filePaths = processFilesPair(new File(path));
+			}
+			else{
+				filePaths = processFilesPairTian(new File(path), filename);
+			}
+
 		} else {
 			return null;
 		}
@@ -157,7 +163,31 @@ public class P4JFeatureAnalyzer implements Analyzer<IRevision> {
 		return pathmap;
 
 	}
-	
+
+	public Map processFilesPairTian(File pairFolder, String filename) {
+		Map<String, File> pathmap = new HashMap();
+
+
+//			String pathname = fileModif.getAbsolutePath().replace(".patch","").replace(".buggy","")
+//					.replace(".fixed","");
+
+		String pathname = pairFolder.toString() + '/' + filename.split("_")[0];
+		File previousVersion = new File(pathname + "_s.java");
+//		File previousVersion = new File(pathname + ".buggy");
+		if (!previousVersion.exists()) {
+			log.error("The source file " + previousVersion.getPath() + " not exist!");
+		} else {
+			pathmap.put("src", previousVersion);
+			File postVersion = new File(pathname + "_t.java");
+//			File postVersion = new File(pathname + ".fixed");
+			pathmap.put("target", postVersion);
+
+		}
+
+
+		return pathmap;
+
+	}
 	
 	 public JsonObject genVectorsCSV(Option option, File patchedFile, List<FeatureMatrix> featureMatrices) {
 	        ParameterVector parameterVector = new ParameterVector(option.featureOption);

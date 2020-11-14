@@ -65,7 +65,8 @@ public class FilePairsDiff implements IRevision {
 
 	@Override
 	public String getFolder() {
-		return "";
+//		return "";
+		return this.left.getParent();
 	}
 
 }

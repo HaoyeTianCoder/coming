@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FileUtils;
 
 import org.apache.log4j.Logger;
 
@@ -108,7 +109,8 @@ public class FileDiff implements IRevision {
 
 	private String getName(File fileModif) {
 		if (!ComingProperties.getPropertyBoolean("file_complete_name")) {
-			return FileUtil.extractFileName(fileModif.getName());
+//			return FileUtil.extractFileName(fileModif.getName());
+			return fileModif.getName();
 		} else {
 			String location = ComingProperties.getProperty("location");
 			if (location != null) {
