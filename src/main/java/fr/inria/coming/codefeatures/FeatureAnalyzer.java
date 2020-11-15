@@ -2,22 +2,18 @@ package fr.inria.coming.codefeatures;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import add.entities.RepairPatterns;
 import add.features.detector.repairpatterns.RepairPatternDetector;
 import add.main.Config;
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.github.difflib.DiffUtils;
 import com.github.difflib.UnifiedDiffUtils;
-import com.google.gson.Gson;
+import com.google.gson.*;
+import com.google.gson.internal.LinkedTreeMap;
 import fr.inria.coming.core.entities.interfaces.IRevisionPair;
 import org.apache.log4j.Logger;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import fr.inria.coming.changeminer.analyzer.commitAnalyzer.FineGrainDifftAnalyzer;
 import fr.inria.coming.changeminer.analyzer.commitAnalyzer.HunkDifftAnalyzer;
@@ -86,6 +82,7 @@ public class FeatureAnalyzer implements Analyzer<IRevision> {
 			file.add("features", changesArray);
 
 			for (Operation operation : ops) {
+				/***
 				CtElement affectedCtElement = getLeftElement(operation);
 
 				if (affectedCtElement != null) {
@@ -103,7 +100,30 @@ public class FeatureAnalyzer implements Analyzer<IRevision> {
 						changesArray.add(jsonFeature);
 					}
 				}
-				
+				***/
+
+				JsonElement P4J = p4jfeatures.getFeatures();
+				Object[] key_array = P4J.getAsJsonObject().keySet().toArray();
+//				for (String key: P4J.getAsJsonObject().keySet()){
+				for (int i=0; i<key_array.length;i++){
+					if (i == 3){
+						System.out.println(1111);
+					}
+					String key = (String) key_array[i];
+					JsonElement v = P4J.getAsJsonObject().get(key);
+
+					JsonObject jf = new JsonObject();
+					jf.addProperty(key, ((JsonPrimitive) v).getAsNumber().intValue());
+					if (changesArray.size()!=4497){
+						changesArray.add(jf);
+					}else {
+						int stored  = changesArray.get(i).getAsJsonObject().get(key).getAsNumber().intValue();
+						int new_value = v.getAsNumber().intValue();
+						stored += new_value;
+
+						changesArray.get(i).getAsJsonObject().addProperty(key,stored);
+					}
+				}
 			}
 			try {
 				// generate unified diff
