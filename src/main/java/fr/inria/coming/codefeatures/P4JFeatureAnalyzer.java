@@ -171,14 +171,14 @@ public class P4JFeatureAnalyzer implements Analyzer<IRevision> {
 //			String pathname = fileModif.getAbsolutePath().replace(".patch","").replace(".buggy","")
 //					.replace(".fixed","");
 
-		String pathname = pairFolder.toString() + '/' + filename.split("_")[0];
-		File previousVersion = new File(pathname + "_s.java");
+		String pathname = pairFolder.toString() + '/' + filename.replace("-t.java","");
+		File previousVersion = new File(pathname + "-s.java");
 //		File previousVersion = new File(pathname + ".buggy");
 		if (!previousVersion.exists()) {
 			log.error("The source file " + previousVersion.getPath() + " not exist!");
 		} else {
 			pathmap.put("src", previousVersion);
-			File postVersion = new File(pathname + "_t.java");
+			File postVersion = new File(pathname + "-t.java");
 //			File postVersion = new File(pathname + ".fixed");
 			pathmap.put("target", postVersion);
 

@@ -106,9 +106,6 @@ public class FeatureAnalyzer implements Analyzer<IRevision> {
 				Object[] key_array = P4J.getAsJsonObject().keySet().toArray();
 //				for (String key: P4J.getAsJsonObject().keySet()){
 				for (int i=0; i<key_array.length;i++){
-					if (i == 3){
-						System.out.println(1111);
-					}
 					String key = (String) key_array[i];
 					JsonElement v = P4J.getAsJsonObject().get(key);
 
