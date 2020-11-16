@@ -192,10 +192,10 @@ public class CodeDiffer {
                 if (dstNode == null) dstNode = srcNode;
             }
             // distinguish functionality changes from revision changes
-            if (srcNode instanceof CtClass || srcNode instanceof CtMethod ||
-                    dstNode instanceof CtClass || dstNode instanceof CtMethod) {
-                continue;
-            }
+//            if (srcNode instanceof CtClass || srcNode instanceof CtMethod ||
+//                    dstNode instanceof CtClass || dstNode instanceof CtMethod) {
+//                continue;
+//            }
             diffEntries.add(new DiffEntry(type, srcNode, dstNode));
         }
         return diffEntries;
