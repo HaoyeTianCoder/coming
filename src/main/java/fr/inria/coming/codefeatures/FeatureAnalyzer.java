@@ -110,15 +110,41 @@ public class FeatureAnalyzer implements Analyzer<IRevision> {
 					JsonElement v = P4J.getAsJsonObject().get(key);
 
 					JsonObject jf = new JsonObject();
-					jf.addProperty(key, ((JsonPrimitive) v).getAsNumber().intValue());
-					if (changesArray.size()!=4497){
-						changesArray.add(jf);
-					}else {
-						int stored  = changesArray.get(i).getAsJsonObject().get(key).getAsNumber().intValue();
-						int new_value = v.getAsNumber().intValue();
-						stored += new_value;
+					int value = 0;
+					String label = ((JsonPrimitive) v).getAsString();
+					if (label.equals("false")){
+						value = 0;
+					}else if (label.equals("true")){
+						value = 1;
+					}
+					jf.addProperty(key, value);
+					if (key_array.length == 4497)
+						if (changesArray.size()!=4497){
+							changesArray.add(jf);
+						}else {
+							int stored  = changesArray.get(i).getAsJsonObject().get(key).getAsNumber().intValue();
+							int new_value = v.getAsNumber().intValue();
+							stored += new_value;
 
-						changesArray.get(i).getAsJsonObject().addProperty(key,stored);
+							changesArray.get(i).getAsJsonObject().addProperty(key,stored);
+						}
+					else if (key_array.length == 156){
+						if (changesArray.size()!=156){
+							changesArray.add(jf);
+						}else {
+							int stored  = changesArray.get(i).getAsJsonObject().get(key).getAsNumber().intValue();
+							int vv = 0;
+							String labelll = ((JsonPrimitive) v).getAsString();
+							if (labelll.equals("false")){
+								vv = 0;
+							}else if (labelll.equals("true")){
+								vv = 1;
+							}
+							int new_value = vv;
+							stored += new_value;
+
+							changesArray.get(i).getAsJsonObject().addProperty(key,stored);
+						}
 					}
 				}
 			}
